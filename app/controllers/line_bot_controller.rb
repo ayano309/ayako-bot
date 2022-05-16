@@ -4,6 +4,8 @@ class LineBotController < ApplicationController
 
 
   def callback
+    @post=Post.offset( rand(Post.count) ).first
+
     body = request.body.read
     signature = request.env['HTTP_X_LINE_SIGNATURE']
     unless client.validate_signature(body, signature)
@@ -11,13 +13,28 @@ class LineBotController < ApplicationController
     end
     events = client.parse_events_from(body)
     events.each do |event|
+
+      if event.message['text'].include?("元気")
+        response = "今日も元気だよ"
+      elsif event.message["text"].include?("ありがとう")
+        response = "いつもありがとうね"
+      elsif event.message['text'].include?("ご飯")
+        response = "お腹すいたね"
+      elsif event.message['text'].include?("明日")
+        response = "また明日ね" 
+      elsif event.message['text'].include?("おやすみ")
+        response = "おやすみー" 
+      else
+        response = @post.name
+      end
+
       case event
       when Line::Bot::Event::Message
         case event.type
         when Line::Bot::Event::MessageType::Text
           message = {
             type: 'text',
-            text: event.message['text']
+            text: response
           }
           client.reply_message(event['replyToken'], message)
         end

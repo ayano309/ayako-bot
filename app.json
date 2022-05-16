@@ -1,0 +1,16 @@
+{
+  "name": "bot app",
+  "description": "This is botapp",
+  "keywords": [],
+  "website": "",
+  "repository": "https://github.com/ayano309/ayako-bot.git",
+  "env": {},
+  "addons": [
+    "heroku-postgresql:hobby-dev"
+  ],
+  "buildpacks": [{
+    "url": "heroku/nodejs"
+  }, {
+    "url": "heroku/ruby"
+  }]
+}
